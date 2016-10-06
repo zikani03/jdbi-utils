@@ -13,6 +13,7 @@ import javax.validation.Validator;
 import javax.validation.ValidatorFactory;
 import java.lang.annotation.*;
 import java.lang.reflect.Method;
+import java.lang.reflect.Parameter;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.Map;
@@ -38,7 +39,7 @@ public @interface Valid {
         }
 
         @Override
-        public SqlStatementCustomizer createForParameter(Annotation annotation, Class<?> sqlObjectType, Method method, Object arg) {
+        public SqlStatementCustomizer createForParameter(Annotation annotation, Class<?> sqlObjectType, Method method, Parameter param, Object arg) {
             final Class<?>[] groups = ((Valid) annotation).groups();
             return create(arg, groups);
         }

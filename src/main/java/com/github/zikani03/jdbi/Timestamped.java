@@ -13,6 +13,7 @@ import java.lang.annotation.*;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.lang.reflect.Parameter;
 import java.sql.Time;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
@@ -57,7 +58,7 @@ public @interface Timestamped {
 
     class Factory implements SqlStatementCustomizerFactory {
         @Override
-        public SqlStatementCustomizer createForParameter(Annotation annotation, Class<?> sqlObjectType, Method method, Object arg) {
+        public SqlStatementCustomizer createForParameter(Annotation annotation, Class<?> sqlObjectType, Method method, Parameter param, Object arg) {
             final String createdField = ((Timestamped) annotation).createdAt(),
                 modifiedField = ((Timestamped) annotation).modifiedAt();
             final boolean isNew = ((Timestamped) annotation).value();
