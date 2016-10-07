@@ -49,7 +49,7 @@ public class Application {
 
         Person p = new Person();
 
-        // This call will throw an `IllegalArgumentException` since there are validation errors
+        // This call will throw an `ValidationException` since there are validation errors
         dao.insert(p);
     }
 
