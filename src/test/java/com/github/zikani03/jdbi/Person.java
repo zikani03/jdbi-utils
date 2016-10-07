@@ -83,4 +83,31 @@ public class Person {
     public void setModified(Timestamp modified) {
         this.modified = modified;
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Person person = (Person) o;
+
+        if (id != person.id) return false;
+        if (!firstName.equals(person.firstName)) return false;
+        if (!lastName.equals(person.lastName)) return false;
+        if (!email.equals(person.email)) return false;
+        if (created != null ? !created.equals(person.created) : person.created != null) return false;
+        return modified != null ? modified.equals(person.modified) : person.modified == null;
+
+    }
+
+    @Override
+    public int hashCode() {
+        int result = id;
+        result = 31 * result + firstName.hashCode();
+        result = 31 * result + lastName.hashCode();
+        result = 31 * result + email.hashCode();
+        result = 31 * result + (created != null ? created.hashCode() : 0);
+        result = 31 * result + (modified != null ? modified.hashCode() : 0);
+        return result;
+    }
 }
