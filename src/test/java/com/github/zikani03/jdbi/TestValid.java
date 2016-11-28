@@ -76,7 +76,7 @@ public class TestValid {
     public void testThrowOnTryingToInsertNullWithValidMethod() {
         Person person = new Person(null, null, null);
         Assertions.assertThrows(ValidationException.class, () ->
-                hsql.openHandle().createStatement(SQL_INSERT)
+                hsql.openHandle().createUpdate(SQL_INSERT)
                         .bindBean(valid(person))
                         .execute()
         );
@@ -87,7 +87,7 @@ public class TestValid {
         Person person = new Person("", "Phiri", "phiri@gmail.com");
 
         Assertions.assertThrows(ValidationException.class, () ->
-                hsql.openHandle().createStatement(SQL_INSERT)
+                hsql.openHandle().createUpdate(SQL_INSERT)
                         .bindBean(valid(person))
                         .execute()
         );
@@ -97,7 +97,7 @@ public class TestValid {
     public void testThrowOnTryingToInsertEmptyLastNameWithValidMethod() {
         Person person = new Person("John", "", "phiri@gmail.com");
         Assertions.assertThrows(ValidationException.class, () ->
-                hsql.openHandle().createStatement(SQL_INSERT)
+                hsql.openHandle().createUpdate(SQL_INSERT)
                         .bindBean(valid(person))
                         .execute()
         );
@@ -107,7 +107,7 @@ public class TestValid {
     public void testDoesNotThrowOnValidBean() {
         Person person = new Person("John", "Phiri", "phiri@gmail.com");
         person.setId(1);
-        hsql.openHandle().createStatement(SQL_INSERT)
+        hsql.openHandle().createUpdate(SQL_INSERT)
                 .bindBean(valid(person))
                 .execute();
         int id = 1;
