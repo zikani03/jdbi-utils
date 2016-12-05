@@ -10,13 +10,12 @@ import java.beans.IntrospectionException;
 import java.beans.Introspector;
 import java.beans.PropertyDescriptor;
 import java.lang.annotation.*;
-import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Parameter;
-import java.sql.Time;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 import java.util.Objects;
 
 /**
@@ -65,11 +64,11 @@ public @interface Timestamped {
             final boolean isNew = ((Timestamped) annotation).value();
 
             return q -> {
-                LocalDateTime now = LocalDateTime.now();
+                OffsetDateTime now = OffsetDateTime.now();
                 if (isNew) {
-                    q.bind(createdField, java.sql.Timestamp.valueOf(now));
+                    q.bind(createdField, now);
                 }
-                q.bind(modifiedField, java.sql.Timestamp.valueOf(now));
+                q.bind(modifiedField, now);
             };
         }
 
@@ -80,12 +79,12 @@ public @interface Timestamped {
             final boolean isNew = ((Timestamped) annotation).value();
 
             return q -> {
-                LocalDateTime now = LocalDateTime.now();
+                OffsetDateTime now = OffsetDateTime.now();
                 if (isNew) {
-                    q.bind(createdField, java.sql.Timestamp.valueOf(now));
+                    q.bind(createdField, now);
                     updateTimestampField(arg, createdField, now);
                 }
-                q.bind(modifiedField, java.sql.Timestamp.valueOf(now));
+                q.bind(modifiedField, now);
                 updateTimestampField(arg, modifiedField, now);
             };
         }
@@ -95,9 +94,9 @@ public @interface Timestamped {
          *
          * @param object The instance of the Java Bean
          * @param fieldName The field we want to update
-         * @param dateTime The value to use during the update
+         * @param dateTime The value to use during the update - using OffsetDateTime to account for different timezone/locale settings
          */
-        private static void updateTimestampField(Object object, String fieldName, LocalDateTime dateTime) {
+        private static void updateTimestampField(Object object, String fieldName, OffsetDateTime dateTime) {
             try {
                 BeanInfo infos = Introspector.getBeanInfo(object.getClass());
                 PropertyDescriptor[] props = infos.getPropertyDescriptors();
@@ -112,14 +111,21 @@ public @interface Timestamped {
                         continue;
                     }
 
-                    Object value = dateTime;
-                    if (prop.getPropertyType() == LocalDateTime.class) {
-                        // don't change it
+                    Object value = null;
+                    if (prop.getPropertyType() == OffsetDateTime.class) {
+                        value = dateTime;
+                    } else if (prop.getPropertyType() == LocalDateTime.class) {
+                        value = dateTime.toLocalDateTime();
                     } else if (prop.getPropertyType() == Timestamp.class) {
-                        value = Timestamp.valueOf(dateTime);
+                        value = Timestamp.from(dateTime.toInstant());
                     } else if (prop.getPropertyType() == Integer.class || prop.getPropertyType() == Long.class){
-                        value = Timestamp.valueOf(dateTime).toInstant().toEpochMilli();
+                        value = dateTime.toInstant().toEpochMilli();
+                    } else if (prop.getPropertyType() == String.class) {
+                        value = dateTime.toString();
+                    } else {
+                        throw new IllegalArgumentException(String.format("Cannot cast %s to %s", dateTime, prop.getPropertyType().getName()));
                     }
+
                     Method writeMethod = prop.getWriteMethod();
                     if (writeMethod != null) {
                         writeMethod.invoke(object, value);
