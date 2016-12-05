@@ -41,7 +41,7 @@ import java.util.Objects;
  *
  * @author zikani
  */
-@Target({ElementType.PARAMETER})
+@Target({ElementType.METHOD, ElementType.PARAMETER})
 @Retention(RetentionPolicy.RUNTIME)
 @SqlStatementCustomizingAnnotation(Timestamped.Factory.class)
 @Documented
@@ -57,6 +57,22 @@ public @interface Timestamped {
     String modifiedAt() default "modified";
 
     class Factory implements SqlStatementCustomizerFactory {
+
+        @Override
+        public SqlStatementCustomizer createForMethod(Annotation annotation, Class<?> sqlObjectType, Method method) {
+            final String createdField = ((Timestamped) annotation).createdAt(),
+                    modifiedField = ((Timestamped) annotation).modifiedAt();
+            final boolean isNew = ((Timestamped) annotation).value();
+
+            return q -> {
+                LocalDateTime now = LocalDateTime.now();
+                if (isNew) {
+                    q.bind(createdField, java.sql.Timestamp.valueOf(now));
+                }
+                q.bind(modifiedField, java.sql.Timestamp.valueOf(now));
+            };
+        }
+
         @Override
         public SqlStatementCustomizer createForParameter(Annotation annotation, Class<?> sqlObjectType, Method method, Parameter param, Object arg) {
             final String createdField = ((Timestamped) annotation).createdAt(),

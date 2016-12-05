@@ -11,6 +11,8 @@ import org.junit.Test;
 import org.junit.gen5.api.Assertions;
 import org.slf4j.LoggerFactory;
 
+import java.time.LocalDateTime;
+
 /**
  * Tests for the Timestamped StatementCustomizer
  *
@@ -95,6 +97,38 @@ public class TestTimestamped {
 
         Assertions.assertNull(p2.getCreated());
         Assertions.assertNotNull(p2.getModified());
+    }
+
+    @Test
+    public void shouldAllowTimestampOnMethod() {
+        LocalDateTime timeBefore = LocalDateTime.now();
+        Person p = new Person("John", "Phiri", "");
+        p.setId(1);
+        MethodTimestampFieldsDAO customDAO = hsql.onDemand(MethodTimestampFieldsDAO.class);
+
+        customDAO.insertWithCustomTimestampFields(p);
+
+        Person fetched = dao.get(1);
+        Assertions.assertEquals(p.getFirstName(), fetched.getFirstName());
+        Assertions.assertEquals(p.getLastName(), fetched.getLastName());
+        Assertions.assertNotNull(fetched.getCreated());
+        Assertions.assertNotNull(fetched.getModified());
+
+        Assertions.assertTrue(timeBefore.isBefore(fetched.getCreated().toLocalDateTime()));
+        Assertions.assertTrue(timeBefore.isBefore(fetched.getModified().toLocalDateTime()));
+
+        // Ensure our custom fields were bound properly
+        hsql.getJdbi().setTimingCollector((l, statementContext) -> {
+            Assertions.assertTrue(statementContext.getBinding().findForName("createdAt").isPresent());
+            Assertions.assertTrue(statementContext.getBinding().findForName("modifiedAt").isPresent());
+        });
+    }
+
+    @RegisterRowMapper(PersonDAO.PersonRowMapper.class)
+    public interface MethodTimestampFieldsDAO {
+        @SqlUpdate("INSERT INTO people(id, firstName, lastName, email, created, modified) VALUES (:p.id, :p.firstName, :p.lastName, :p.email, :createdAt, :modifiedAt)")
+        @Timestamped(createdAt = "createdAt", modifiedAt = "modifiedAt")
+        int insertWithCustomTimestampFields(@BindBean("p") Person person);
     }
 
     @RegisterRowMapper(PersonDAO.PersonRowMapper.class)
