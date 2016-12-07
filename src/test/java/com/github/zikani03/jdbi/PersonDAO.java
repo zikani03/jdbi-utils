@@ -16,8 +16,13 @@ import java.util.List;
 @RegisterRowMapper(PersonDAO.PersonRowMapper.class)
 public interface PersonDAO {
     @GetGeneratedKeys
-    @SqlUpdate("INSERT INTO people(id, firstName, lastName, email, created, modified) VALUES (:p.id, :p.firstName, :p.lastName, :p.email, :created, :modified)")
-    int insert(@BindBean("p") @Valid @Timestamped Person person);
+    @SqlUpdate("INSERT INTO people(id, firstName, lastName, email, created, modified) VALUES (:p.id, :p.firstName, :p.lastName, :p.email, :now, :now)")
+    @Timestamped
+    int insert(@BindBean("p") @Valid Person person);
+
+    @SqlUpdate("INSERT INTO people(id, firstName, lastName, email, created, modified) VALUES (:p.id, :p.firstName, :p.lastName, :p.email, :createdAt, :createdAt)")
+    @Timestamped("createdAt")
+    int insertWithCustomTimestampFields(@BindBean("p") Person person);
 
     @SqlUpdate("UPDATE people SET email=:p.email WHERE id=:p.id")
     void updateEmail(@BindBean("p") @Valid(groups = Person.EmailUpdate.class) Person person);

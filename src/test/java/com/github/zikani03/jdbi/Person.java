@@ -94,9 +94,7 @@ public class Person {
         if (id != person.id) return false;
         if (!firstName.equals(person.firstName)) return false;
         if (!lastName.equals(person.lastName)) return false;
-        if (!email.equals(person.email)) return false;
-        if (created != null ? !created.equals(person.created) : person.created != null) return false;
-        return modified != null ? modified.equals(person.modified) : person.modified == null;
+        return email != null ? email.equals(person.email) : person.email == null;
 
     }
 
