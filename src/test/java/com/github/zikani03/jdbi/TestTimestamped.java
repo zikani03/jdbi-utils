@@ -8,6 +8,8 @@ import org.junit.gen5.api.Assertions;
 
 import java.time.LocalDateTime;
 
+import static org.assertj.core.api.Assertions.assertThat;
+
 /**
  * Tests for the Timestamped StatementCustomizer
  *
@@ -63,6 +65,36 @@ public class TestTimestamped {
         // Ensure our custom fields were bound properly
         hsql.getJdbi().setTimingCollector((l, statementContext) -> {
             Assertions.assertTrue(statementContext.getBinding().findForName("createdAt").isPresent());
+        });
+    }
+
+    @Test
+    public void shouldUpdateModifiedTimestamp() {
+        PersonDAO personDao = hsql.onDemand(PersonDAO.class);
+
+        Person p = new Person("John", "Phiri", "");
+
+        p.setId(3);
+
+        personDao.insert(p);
+
+        Person personAfterCreate = dao.get(3);
+
+        personAfterCreate.setLastName("Banda");
+
+        personDao.updatePerson(personAfterCreate);
+
+        Person personAfterUpdate = dao.get(3);
+
+        assertThat(personAfterUpdate.getLastName()).isEqualToIgnoringCase("Banda");
+
+        assertThat(personAfterUpdate.getCreated()).isEqualTo(personAfterCreate.getCreated());
+
+        assertThat(personAfterUpdate.getModified()).isAfter(personAfterCreate.getModified());
+
+        // Ensure our custom fields were bound properly
+        hsql.getJdbi().setTimingCollector((l, statementContext) -> {
+            Assertions.assertTrue(statementContext.getBinding().findForName("now").isPresent());
         });
     }
 }

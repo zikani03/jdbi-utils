@@ -24,6 +24,10 @@ public interface PersonDAO {
     @Timestamped("createdAt")
     int insertWithCustomTimestampFields(@BindBean("p") Person person);
 
+    @SqlUpdate("UPDATE people SET firstName = :p.firstName, lastName = :p.lastName, email = :p.email, modified= :now WHERE id = :p.id")
+    @Timestamped
+    int updatePerson(@BindBean("p") Person person);
+
     @SqlUpdate("UPDATE people SET email=:p.email WHERE id=:p.id")
     void updateEmail(@BindBean("p") @Valid(groups = Person.EmailUpdate.class) Person person);
 
