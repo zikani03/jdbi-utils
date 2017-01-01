@@ -83,25 +83,6 @@ public interface PersonDAO {
 }
 ```
 
-### Timestamp
-
-Add the `@Timestamped` annotation to a parameter in an SqlObject method to get timestamping behavior.<br/>
-
-The annotation binds the named parameters <code>:created</code> and <code>:modified</code> to the SQL Statement by default.
-
-After the method executes the bean will have it's timestamp values updated to the same
-value that is sent to the database via the <code>:created</code> and <code>:modified</code> parameters
-
-```java
-public interface PersonDAO {
-    @SqlUpdate("INSERT INTO people(id, firstName, lastName, email, created, modified) VALUES (:p.id, :p.firstName, :p.lastName, :p.email, :created, :modified)")
-    void insert(@BindBean("p") @Timestamped Person person);
-}
-```
-
-So, if you called the `insert` method somewhere, like `dao.insert(person)` - you would expect the values of
-`person.getCreated()` and `person.getModified()` to return updated values accordingly.
-
 ## Building, Using
 
 Use Maven 3 to compile and install the library to your local maven repo:
