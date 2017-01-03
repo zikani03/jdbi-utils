@@ -1,9 +1,14 @@
 package com.github.zikani03.jdbi;
 
-import org.jdbi.v3.core.StatementContext;
 import org.jdbi.v3.core.mapper.RowMapper;
-import org.jdbi.v3.sqlobject.*;
-import org.jdbi.v3.sqlobject.customizers.RegisterRowMapper;
+import org.jdbi.v3.core.statement.StatementContext;
+import org.jdbi.v3.sqlobject.config.RegisterRowMapper;
+import org.jdbi.v3.sqlobject.customizer.Bind;
+import org.jdbi.v3.sqlobject.customizer.BindBean;
+import org.jdbi.v3.sqlobject.customizer.Timestamped;
+import org.jdbi.v3.sqlobject.statement.GetGeneratedKeys;
+import org.jdbi.v3.sqlobject.statement.SqlQuery;
+import org.jdbi.v3.sqlobject.statement.SqlUpdate;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -17,12 +22,15 @@ import java.util.List;
 public interface PersonDAO {
     @GetGeneratedKeys
     @SqlUpdate("INSERT INTO people(id, firstName, lastName, email, created, modified) VALUES (:p.id, :p.firstName, :p.lastName, :p.email, :now, :now)")
+    @Timestamped
     int insert(@BindBean("p") @Valid Person person);
 
     @SqlUpdate("INSERT INTO people(id, firstName, lastName, email, created, modified) VALUES (:p.id, :p.firstName, :p.lastName, :p.email, :createdAt, :createdAt)")
+    @Timestamped("createdAt")
     int insertWithCustomTimestampFields(@BindBean("p") Person person);
 
     @SqlUpdate("UPDATE people SET firstName = :p.firstName, lastName = :p.lastName, email = :p.email, modified= :now WHERE id = :p.id")
+    @Timestamped
     int updatePerson(@BindBean("p") Person person);
 
     @SqlUpdate("UPDATE people SET email=:p.email WHERE id=:p.id")

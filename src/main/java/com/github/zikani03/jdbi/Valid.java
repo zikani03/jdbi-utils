@@ -1,13 +1,17 @@
 package com.github.zikani03.jdbi;
 
-import org.jdbi.v3.core.StatementContext;
+import org.jdbi.v3.core.statement.StatementContext;
 import org.jdbi.v3.core.statement.StatementCustomizer;
-import org.jdbi.v3.sqlobject.SqlStatementCustomizer;
-import org.jdbi.v3.sqlobject.SqlStatementCustomizerFactory;
-import org.jdbi.v3.sqlobject.SqlStatementCustomizingAnnotation;
+import org.jdbi.v3.sqlobject.customizer.SqlStatementCustomizer;
+import org.jdbi.v3.sqlobject.customizer.SqlStatementCustomizerFactory;
+import org.jdbi.v3.sqlobject.customizer.SqlStatementCustomizingAnnotation;
 
-import javax.validation.ValidatorFactory;
-import java.lang.annotation.*;
+import java.lang.annotation.Annotation;
+import java.lang.annotation.Documented;
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
 import java.lang.reflect.Method;
 import java.lang.reflect.Parameter;
 import java.sql.PreparedStatement;
@@ -32,13 +36,13 @@ public @interface Valid {
         }
 
         @Override
-        public SqlStatementCustomizer createForParameter(Annotation annotation, Class<?> sqlObjectType, Method method, Parameter param, Object arg) {
+        public SqlStatementCustomizer createForParameter(Annotation annotation, Class<?> sqlObjectType, Method method, Parameter param, int index, Object arg) {
             final Class<?>[] groups = ((Valid) annotation).groups();
             return create(arg, groups);
         }
 
         private SqlStatementCustomizer create(Object entity, Class<?>... groups) {
-            return q -> q.addStatementCustomizer(new ValidatingCustomizer(entity, groups));
+            return q -> q.addCustomizer(new ValidatingCustomizer(entity, groups));
         }
     }
 

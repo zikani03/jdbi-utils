@@ -112,9 +112,9 @@ public class TestValid {
                 .execute();
         int id = 1;
         Optional<Person> p = hsql.openHandle().createQuery(SQL_SELECT)
+                .bind("id", id)
                 .registerRowMapper(new PersonDAO.PersonRowMapper())
                 .mapTo(Person.class)
-                .bind("id", id)
                 .findFirst();
 
         Assertions.assertTrue(p.isPresent());

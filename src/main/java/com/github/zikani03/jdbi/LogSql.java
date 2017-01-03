@@ -1,10 +1,10 @@
 package com.github.zikani03.jdbi;
 
-import org.jdbi.v3.core.StatementContext;
+import org.jdbi.v3.core.statement.StatementContext;
 import org.jdbi.v3.core.statement.StatementCustomizer;
-import org.jdbi.v3.sqlobject.SqlStatementCustomizer;
-import org.jdbi.v3.sqlobject.SqlStatementCustomizerFactory;
-import org.jdbi.v3.sqlobject.SqlStatementCustomizingAnnotation;
+import org.jdbi.v3.sqlobject.customizer.SqlStatementCustomizer;
+import org.jdbi.v3.sqlobject.customizer.SqlStatementCustomizerFactory;
+import org.jdbi.v3.sqlobject.customizer.SqlStatementCustomizingAnnotation;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -37,7 +37,7 @@ public @interface LogSql {
         public SqlStatementCustomizer createForType(Annotation annotation, Class<?> sqlObjectType) {
             boolean logRawSql = ((LogSql) annotation).value();
             LogLevel level = ((LogSql) annotation).level();
-            return q -> q.addStatementCustomizer(new SqlLogger(sqlObjectType, logRawSql, level));
+            return q -> q.addCustomizer(new SqlLogger(sqlObjectType, logRawSql, level));
         }
     }
 
