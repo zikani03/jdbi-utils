@@ -5,13 +5,9 @@ import org.jdbi.v3.core.statement.StatementCustomizer;
 import org.jdbi.v3.sqlobject.customizer.SqlStatementCustomizer;
 import org.jdbi.v3.sqlobject.customizer.SqlStatementCustomizerFactory;
 import org.jdbi.v3.sqlobject.customizer.SqlStatementCustomizingAnnotation;
+import org.jdbi.v3.sqlobject.customizer.SqlStatementParameterCustomizer;
 
-import java.lang.annotation.Annotation;
-import java.lang.annotation.Documented;
-import java.lang.annotation.ElementType;
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
-import java.lang.annotation.Target;
+import java.lang.annotation.*;
 import java.lang.reflect.Method;
 import java.lang.reflect.Parameter;
 import java.sql.PreparedStatement;
@@ -36,13 +32,13 @@ public @interface Valid {
         }
 
         @Override
-        public SqlStatementCustomizer createForParameter(Annotation annotation, Class<?> sqlObjectType, Method method, Parameter param, int index, Object arg) {
-            final Class<?>[] groups = ((Valid) annotation).groups();
-            return create(arg, groups);
+        public SqlStatementParameterCustomizer createForParameter(Annotation annotation, Class<?> sqlObjectType, Method method, Parameter param, int index) {
+            final Class<?>[] validationGroups = ((Valid) annotation).groups();
+            return create(validationGroups);
         }
 
-        private SqlStatementCustomizer create(Object entity, Class<?>... groups) {
-            return q -> q.addCustomizer(new ValidatingCustomizer(entity, groups));
+        private SqlStatementParameterCustomizer create(Class<?>... groups) {
+            return (q, entity) -> q.addCustomizer(new ValidatingCustomizer(entity, groups));
         }
     }
 
