@@ -4,10 +4,7 @@ Jdbi3 Utilities
 A set of utilities for working with [Jdbi 3](https://github.com/jdbi/jdbi)
 
 > **NOTE**:
-> This library is using an alpha version of Jdbi as [Jdbi 3 is still in development](https://github.com/jdbi/jdbi/issues)
-> so it's not really recommended to use this in production unless you know what you're doing.
-
-With that said:
+> This library is using a beta version of Jdbi as [Jdbi 3 is still in development](https://github.com/jdbi/jdbi/issues)
 
 ### Counter
 
@@ -17,7 +14,7 @@ For example if you wanted to update a user's post count after inserting a new Po
 you would do something like this:
 
 ```java
-jdbi.getHandle()
+Jdbi.open()
     .createUpdate("INSERT INTO posts(content, user_id) VALUES (:content, :user_id)")
     .bind("content", "Yay! Post content!")
     .bind("user_id", 1)
