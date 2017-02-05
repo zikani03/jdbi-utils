@@ -9,7 +9,38 @@ A set of utilities for working with [Jdbi 3](https://github.com/jdbi/jdbi)
 
 With that said:
 
-## SqlObject Utilities
+### Counter
+
+Use the `CounterCustomizer` to automatically update a "counter field" in a table.
+
+For example if you wanted to update a user's post count after inserting a new Post
+you would do something like this:
+
+```java
+jdbi.getHandle()
+    .createUpdate("INSERT INTO posts(content, user_id) VALUES (:content, :user_id)")
+    .bind("content", "Yay! Post content!")
+    .bind("user_id", 1)
+    .addCustomizer(new CounterCustomizer("users", "posts_count", "user_id", "id"))
+    .execute();
+```
+
+This will increment the `posts_count` column in the users table automatically!
+
+> NOTE: In order to avoid potential SQL injections, you **MUST NOT** use _untrusted_ user input as arguments for the `CounterCustomizer` constructor
+
+You can even use it with SqlObjects using the `@Counter` annotation :
+
+```java
+public interface PostDAO {
+    @SqlUpdate("INSERT INTO posts(content, user_id) VALUES (:p.content, :p.userId)")
+    @Counter(table = "users", column = "posts_count", binding = "p.userId")
+    void insert(@BindBean("p") Post post);
+}
+```
+
+You can also make the counter decrement by setting the `decrementing` argument to `true` in the annotation.
+
 
 ### Validation
 
