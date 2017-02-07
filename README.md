@@ -113,7 +113,9 @@ public interface PersonDAO {
 
 ## Building, Using
 
-Use Maven 3 to compile and install the library to your local maven repo:
+The project is not yet available via the central repository so you have to
+clone/download the files and install the library to your local maven repo.
+Use the following commands:
 
 ```
 $ git clone https://github.com/zikani03/jdbi-utils.git
@@ -123,13 +125,13 @@ $ cd jdbi-utils
 $ mvn clean install
 ```
 
-Add as a dependency in your `pom.xml`
+After that, you can add the library as a dependency in your project's `pom.xml`
 
 ```xml
 <dependency>
     <groupId>com.github.zikani03</groupId>
     <artifactId>jdbi-utils</artifactId>
-    <version>0.1.0</version>
+    <version>0.2.0</version>
 </dependency>
 ```
 
