@@ -8,6 +8,7 @@ import org.jdbi.v3.sqlobject.customizer.SqlStatementParameterCustomizer;
 import java.lang.annotation.*;
 import java.lang.reflect.Method;
 import java.lang.reflect.Parameter;
+import java.lang.reflect.Type;
 
 /**
  * Executes a statement to update a counter field in a table after executing a query on an SqlObject method
@@ -53,7 +54,7 @@ public @interface Counter {
         }
 
         @Override
-        public SqlStatementParameterCustomizer createForParameter(Annotation annotation, Class<?> sqlObjectType, Method method, Parameter param, int index) {
+        public SqlStatementParameterCustomizer createForParameter(Annotation annotation, Class<?> sqlObjectType, Method method, Parameter param, int index, Type parameterType) {
             return (stmt, arg) -> counter((Counter) annotation);
         }
 

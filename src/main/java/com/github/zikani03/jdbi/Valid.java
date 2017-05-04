@@ -10,6 +10,7 @@ import org.jdbi.v3.sqlobject.customizer.SqlStatementParameterCustomizer;
 import java.lang.annotation.*;
 import java.lang.reflect.Method;
 import java.lang.reflect.Parameter;
+import java.lang.reflect.Type;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 
@@ -32,7 +33,7 @@ public @interface Valid {
         }
 
         @Override
-        public SqlStatementParameterCustomizer createForParameter(Annotation annotation, Class<?> sqlObjectType, Method method, Parameter param, int index) {
+        public SqlStatementParameterCustomizer createForParameter(Annotation annotation, Class<?> sqlObjectType, Method method, Parameter param, int index, Type paramType) {
             final Class<?>[] validationGroups = ((Valid) annotation).groups();
             return create(validationGroups);
         }
