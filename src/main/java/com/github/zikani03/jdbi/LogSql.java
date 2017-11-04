@@ -58,9 +58,9 @@ public @interface LogSql {
         @Override
         public void afterExecution(PreparedStatement stmt, StatementContext ctx) throws SQLException {
             if (logLevel.equals(LogLevel.INFO)) {
-                logger.info(logRawSql ? ctx.getRawSql() : ctx.getRewrittenSql());
+                logger.info(logRawSql ? ctx.getRawSql() : ctx.getRenderedSql());
             } else {
-                logger.debug(logRawSql ? ctx.getRawSql() : ctx.getRewrittenSql());
+                logger.debug(logRawSql ? ctx.getRawSql() : ctx.getRenderedSql());
             }
         }
     }

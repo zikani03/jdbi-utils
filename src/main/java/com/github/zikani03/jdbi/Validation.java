@@ -1,7 +1,5 @@
 package com.github.zikani03.jdbi;
 
-import com.google.common.base.MoreObjects;
-
 import javax.validation.ConstraintViolation;
 import javax.validation.ValidationException;
 import javax.validation.Validator;
@@ -31,12 +29,15 @@ public final class Validation {
      * @throws Exception
      */
     public static <T> void throwOnFailedValidation(T value, Class<?>... groups) throws ValidationException {
-        MoreObjects.ToStringHelper helper = MoreObjects.toStringHelper(Map.class);
+        StringBuilder helper = new StringBuilder();
         Map<String, String> validationErrors = validate(value, groups);
         if (! validationErrors.isEmpty()) {
             validationErrors.entrySet()
                     .stream()
-                    .forEach(entry -> helper.add(entry.getKey(), entry.getValue()));
+                    .forEach(entry -> helper.append(entry.getKey())
+                                            .append("=")
+                                            .append(entry.getValue())
+                                            .append(" "));
             throw new ValidationException("Entity contains validation errors. Errors: " + helper.toString());
         }
     }

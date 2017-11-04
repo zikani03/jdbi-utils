@@ -78,7 +78,7 @@ public class CounterCustomizer implements StatementCustomizer {
 
     @Override
     public void afterExecution(PreparedStatement stmt, StatementContext ctx) throws SQLException {
-        Optional<Argument> bindingVal = ctx.getBinding().findForName(binding);
+        Optional<Argument> bindingVal = ctx.getBinding().findForName(binding, ctx);
 
         if (! bindingVal.isPresent()) {
             LoggerFactory.getLogger(getClass()).warn("Missing binding '{}'. Cannot update counter", binding);
