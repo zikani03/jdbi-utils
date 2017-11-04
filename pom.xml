@@ -3,7 +3,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.github.zikani03</groupId>
     <artifactId>jdbi-utils</artifactId>
-    <version>0.2.0</version>
+    <version>0.3.0</version>
 
     <name>Jdbi3 Utilities</name>
     <description>Utilities for working with Jdbi3</description>
