@@ -29,7 +29,8 @@
         <jdbi.version>3.0.0-beta4</jdbi.version>
         <hsqldb.version>2.3.4</hsqldb.version>
         <hibernate-validator.version>6.0.4.Final</hibernate-validator.version>
-        <junit5.version>5.0.0-ALPHA</junit5.version>
+        <junit.jupiter.version>5.0.1</junit.jupiter.version>
+        <junit.platform.version>1.0.1</junit.platform.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
 
@@ -70,9 +71,15 @@
             <version>${slf4j.version}</version>
         </dependency>
         <dependency>
-            <groupId>org.junit</groupId>
-            <artifactId>junit5-api</artifactId>
-            <version>${junit5.version}</version>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter-api</artifactId>
+            <version>${junit.jupiter.version}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter-engine</artifactId>
+            <version>${junit.jupiter.version}</version>
             <scope>test</scope>
         </dependency>
         <dependency>
@@ -111,9 +118,9 @@
                 <version>2.19</version>
                 <dependencies>
                     <dependency>
-                        <groupId>org.junit</groupId>
-                        <artifactId>surefire-junit5</artifactId>
-                        <version>${junit5.version}</version>
+                        <groupId>org.junit.platform</groupId>
+                        <artifactId>junit-platform-surefire-provider</artifactId>
+                        <version>${junit.platform.version}</version>
                     </dependency>
                 </dependencies>
             </plugin>

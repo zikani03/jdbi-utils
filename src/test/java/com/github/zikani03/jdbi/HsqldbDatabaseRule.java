@@ -4,7 +4,6 @@ import org.jdbi.v3.core.ConnectionFactory;
 import org.jdbi.v3.core.Handle;
 import org.jdbi.v3.core.Jdbi;
 import org.jdbi.v3.core.spi.JdbiPlugin;
-import org.junit.rules.ExternalResource;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -17,7 +16,7 @@ import java.util.UUID;
 /**
  * H2DatabaseRule
  */
-public class HsqldbDatabaseRule extends ExternalResource {
+public class HsqldbDatabaseRule {
     private final String uri = "jdbc:hsqldb:mem:" + UUID.randomUUID();
     private Connection con;
     private Jdbi dbi;
@@ -25,9 +24,7 @@ public class HsqldbDatabaseRule extends ExternalResource {
     private boolean installPlugins = false;
     private List<JdbiPlugin> plugins = new ArrayList<>();
 
-    @Override
-    protected void before() throws Throwable
-    {
+    public void before() throws Exception {
         dbi = Jdbi.create(uri);
         if (installPlugins) {
             dbi.installPlugins();
@@ -40,9 +37,7 @@ public class HsqldbDatabaseRule extends ExternalResource {
         }
     }
 
-    @Override
-    protected void after()
-    {
+    public void after() throws Exception {
         try {
             con.close();
         } catch (SQLException e) {
@@ -90,4 +85,6 @@ public class HsqldbDatabaseRule extends ExternalResource {
     {
         return () -> DriverManager.getConnection(getConnectionString());
     }
+
+
 }

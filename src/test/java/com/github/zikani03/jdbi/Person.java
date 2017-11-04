@@ -1,8 +1,8 @@
 package com.github.zikani03.jdbi;
 
 import org.hibernate.validator.constraints.Email;
-import org.hibernate.validator.constraints.NotEmpty;
 
+import javax.validation.constraints.NotEmpty;
 import java.sql.Timestamp;
 
 /**

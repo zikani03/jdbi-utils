@@ -1,10 +1,10 @@
 package com.github.zikani03.jdbi;
 
 import org.jdbi.v3.sqlobject.SqlObjectPlugin;
-import org.junit.Before;
-import org.junit.Rule;
-import org.junit.Test;
-import org.junit.gen5.api.Assertions;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import javax.validation.ValidationException;
 import java.util.Optional;
@@ -18,13 +18,18 @@ public class TestValid {
 
     public PersonDAO dao;
 
-    @Rule
     public HsqldbDatabaseRule hsql = new HsqldbDatabaseRule();
 
-    @Before
-    public void beforeEach() {
+    @BeforeEach
+    public void beforeEach() throws Exception {
+        hsql.before();
         hsql.getJdbi().installPlugin(new SqlObjectPlugin());
         dao = hsql.onDemand(PersonDAO.class);
+    }
+
+    @AfterEach
+    public void  afterEach() throws Exception {
+        hsql.after();
     }
 
     @Test

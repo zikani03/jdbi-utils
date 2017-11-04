@@ -4,9 +4,9 @@ import org.jdbi.v3.core.Handle;
 import org.jdbi.v3.sqlobject.SqlObjectPlugin;
 import org.jdbi.v3.sqlobject.customizer.BindBean;
 import org.jdbi.v3.sqlobject.statement.SqlUpdate;
-import org.junit.Before;
-import org.junit.Rule;
-import org.junit.Test;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import static org.junit.Assert.assertEquals;
 
@@ -15,19 +15,24 @@ import static org.junit.Assert.assertEquals;
  */
 public class TestCounter {
 
-    @Rule
     public HsqldbDatabaseRule hsql = new HsqldbDatabaseRule();
 
     public PostDAO dao;
 
-    @Before
-    public void beforeEach() {
+    @BeforeEach
+    public void beforeEach() throws Exception{
+        hsql.before();
         hsql.getJdbi().installPlugin(new SqlObjectPlugin());
         Handle h = hsql.getSharedHandle();
         h.execute("create table posts(id identity primary key, content varchar(140), user_id integer);");
         h.execute("create table users(id identity primary key, posts_count integer);");
         h.execute("INSERT INTO users(id, posts_count) VALUES (1, 0);");
         dao = hsql.onDemand(PostDAO.class);
+    }
+
+    @AfterEach
+    public void  afterEach() throws Exception {
+        hsql.after();
     }
 
     @Test
