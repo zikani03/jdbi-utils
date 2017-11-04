@@ -1,5 +1,7 @@
 package com.github.zikani03.jdbi;
 
+import org.hibernate.validator.HibernateValidator;
+
 import javax.validation.ConstraintViolation;
 import javax.validation.ValidationException;
 import javax.validation.Validator;
@@ -9,7 +11,10 @@ import java.util.Objects;
 import java.util.stream.Collectors;
 
 public final class Validation {
-    static final ValidatorFactory factory = javax.validation.Validation.buildDefaultValidatorFactory();
+    static final ValidatorFactory validatorFactory = javax.validation.Validation
+                    .byProvider( HibernateValidator.class )
+                    .configure()
+                    .buildValidatorFactory();
 
     /**
      * Validates arguments via Hibernate validator and throws an {@link ValidationException}
@@ -53,7 +58,7 @@ public final class Validation {
      * @return
      */
     public static <T> Map<String, String> validate(T value, Class<?>... groups) {
-        Validator validator = factory.getValidator();
+        Validator validator = validatorFactory.getValidator();
         if (!Objects.isNull(groups) || groups.length > 0) {
             return validator.validate(value, groups).stream()
                     .collect(Collectors.toMap(cv -> cv.getPropertyPath().toString(), ConstraintViolation::getMessage));
