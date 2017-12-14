@@ -3,9 +3,6 @@ Jdbi3 Utilities
 
 A set of utilities for working with [Jdbi 3](https://github.com/jdbi/jdbi)
 
-> **NOTE**:
-> This library is using a beta version of Jdbi as [Jdbi 3 is still in development](https://github.com/jdbi/jdbi/issues)
-
 ### Counter
 
 Use the `CounterCustomizer` to automatically update a "counter field" in a table.
