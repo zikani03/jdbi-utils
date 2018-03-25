@@ -3,7 +3,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.github.zikani03</groupId>
     <artifactId>jdbi-utils</artifactId>
-    <version>0.3.0</version>
+    <version>0.3.1</version>
 
     <name>Jdbi3 Utilities</name>
     <description>Utilities for working with Jdbi3</description>
@@ -106,7 +106,7 @@
         <plugins>
             <plugin>
                 <artifactId>maven-compiler-plugin</artifactId>
-                <version>3.5.1</version>
+                <version>3.7.0</version>
                 <configuration>
                     <source>1.8</source>
                     <target>1.8</target>
