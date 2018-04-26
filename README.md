@@ -108,18 +108,18 @@ public interface PersonDAO {
 }
 ```
 
-## Building, Using
+## Installation
 
-The project is not yet available via the central repository so you have to
-clone/download the files and install the library to your local maven repo.
-Use the following commands:
+You can get the library via [JitPack](https://jitpack.io). First of all add the following repository to your
+build file
 
-```
-$ git clone https://github.com/zikani03/jdbi-utils.git
-
-$ cd jdbi-utils
-
-$ mvn clean install
+```xml
+<repositories>
+    <repository>
+        <id>jitpack.io</id>
+        <url>https://jitpack.io</url>
+    </repository>
+</repositories>
 ```
 
 After that, you can add the library as a dependency in your project's `pom.xml`
@@ -128,9 +128,11 @@ After that, you can add the library as a dependency in your project's `pom.xml`
 <dependency>
     <groupId>com.github.zikani03</groupId>
     <artifactId>jdbi-utils</artifactId>
-    <version>0.2.0</version>
+    <version>0.3.1</version>
 </dependency>
 ```
+
+Alternatively, clone the git repository and install to your local maven repo with `mvn clean install`
 
 ## Contributing
 
