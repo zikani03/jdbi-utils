@@ -128,7 +128,7 @@ After that, you can add the library as a dependency in your project's `pom.xml`
 <dependency>
     <groupId>com.github.zikani03</groupId>
     <artifactId>jdbi-utils</artifactId>
-    <version>0.3.1</version>
+    <version>0.3.4</version>
 </dependency>
 ```
 
