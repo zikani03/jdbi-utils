@@ -28,21 +28,19 @@ public final class Validation {
     /**
      * Validates a value and throws exception if there were any validation errors.
      *
-     * @param value
+     * @param object
      * @param groups
      * @param <T>
      * @throws Exception
      */
-    public static <T> void throwOnFailedValidation(T value, Class<?>... groups) throws ValidationException {
+    public static <T> void throwOnFailedValidation(T object, Class<?>... groups) throws ValidationException {
         StringBuilder helper = new StringBuilder();
-        Map<String, String> validationErrors = validate(value, groups);
+        Map<String, String> validationErrors = validate(object, groups);
         if (! validationErrors.isEmpty()) {
-            validationErrors.entrySet()
-                    .stream()
-                    .forEach(entry -> helper.append(entry.getKey())
-                                            .append("=")
-                                            .append(entry.getValue())
-                                            .append(" "));
+            validationErrors.forEach((key, value) -> helper.append(key)
+                .append("=")
+                .append(value)
+                .append(" "));
             throw new ValidationException("Entity contains validation errors. Errors: " + helper.toString());
         }
     }
