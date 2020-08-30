@@ -64,7 +64,8 @@ public @interface Counter {
                     binding = config.binding(),
                     primaryKey = config.primaryKey();
             final boolean decrementing = config.decrementing();
-            return (stmt) -> stmt.addCustomizer(new CounterCustomizer(table, column, binding, primaryKey, decrementing));
+            return (stmt) -> stmt.addCustomizer(
+                new CounterCustomizer(table, column, binding, primaryKey, decrementing));
         }
     }
 }

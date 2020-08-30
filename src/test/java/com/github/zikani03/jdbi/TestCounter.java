@@ -44,12 +44,12 @@ public class TestCounter {
             .addCustomizer(new CounterCustomizer("users", "posts_count", "author_id", "id"))
             .execute();
 
-        int val = hsql.getSharedHandle()
+        int postCount = hsql.getSharedHandle()
                 .createQuery("SELECT posts_count FROM users WHERE id = 1")
                 .mapTo(Integer.class)
-                .findOnly();
+                .first();
 
-        assertEquals(1, val);
+        assertEquals(1, postCount);
     }
 
     @Test
