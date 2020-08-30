@@ -35,6 +35,22 @@ public interface PostDAO {
 
 You can also make the counter decrement by setting the `decrementing` argument to `true` in the annotation.
 
+### Capitalize Customizer
+
+Use the `CapitalizeCustomizer` to automatically set bound fields to UPPER CASE!
+
+For example if you wanted to capitalize the content of each Post before saving
+to the database you would do something like this:
+
+```java
+Jdbi.open()
+    .createUpdate("INSERT INTO posts(content, user_id) VALUES (:content, :user_id)")
+    .bind("content", "Yay! Post content!")
+    .bind("user_id", 1)
+    .addCustomizer(new CapitalizeCustomizer("content"))
+    .execute();
+```
+
 
 ### Validation
 
