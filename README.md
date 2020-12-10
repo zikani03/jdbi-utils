@@ -136,6 +136,12 @@ Just add the following dependency to your project, note the scope is `provided`
 </dependency>
 ```
 
+This will generate an error like the following if an SQL file cannot be found:
+
+```
+[ERROR] .../jdbi-utils/example/src/main/java/com/github/zikani03/jdbi/ExampleDAO.java:[7,8] ClasspathSqlChecker could not find or load SQL file: ExampleDAO/selectOne.sql
+```
+
 ### SQL Logging
 
 Add the `@LogSql` annotation to your SqlObjects to log executed SQL statements, by default the statements
