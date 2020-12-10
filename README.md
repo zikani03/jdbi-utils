@@ -131,7 +131,7 @@ Just add the following dependency to your project, note the scope is `provided`
 <dependency>
     <groupId>com.github.zikani03</groupId>
     <artifactId>jdbi-utils-useclasspathsql-checker</artifactId>
-    <version>${jdbi-utils.version}</version>
+    <version>0.4.0</version>
     <scope>provided</scope>
 </dependency>
 ```
@@ -172,7 +172,7 @@ After that, you can add the library as a dependency in your project's `pom.xml`
 <dependency>
     <groupId>com.github.zikani03</groupId>
     <artifactId>jdbi-utils</artifactId>
-    <version>0.3.4</version>
+    <version>0.4.0</version>
 </dependency>
 ```
 
