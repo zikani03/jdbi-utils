@@ -1,0 +1,44 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    
+    <parent>
+        <groupId>com.github.zikani03</groupId>
+        <artifactId>jdbi-utils-parent</artifactId>
+        <version>0.4.0-SNAPSHOT</version>
+    </parent>
+
+    <artifactId>jdbi-utils-examples</artifactId>
+    <version>0.1.0-SNAPSHOT</version>
+    <name>Jdbi3 Utilities Example</name>
+    <description>Examples using jdbi-utils</description>
+    
+    <dependencies>
+        <dependency>
+            <groupId>com.github.zikani03</groupId>
+            <artifactId>jdbi-utils</artifactId>
+            <version>${jdbi-utils.version}</version>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.github.zikani03</groupId>
+            <artifactId>jdbi-utils-useclasspathsql-checker</artifactId>
+            <version>${jdbi-utils.version}</version>
+            <scope>provided</scope>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>${maven-compiler-plugin.version}</version>
+                <configuration>
+                    <source>${java.version}</source>
+                    <target>${java.version}</target>
+                    <encoding>UTF-8</encoding>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+</project>
