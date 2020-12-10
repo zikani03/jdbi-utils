@@ -108,6 +108,34 @@ public class Application {
 > NOTE: You don't necessarily have to use the `@BindBean` annotation. It should work with any
 binding annotation - but that's not been tested thoroughly.
 
+### @UseClasspathSqlLocator compile-time checks
+
+The `useclasspathsql-checker` module implements an Annotation Processor that checks that 
+SQL files for methods on your DAOs (SqlObjects in JDBI speak) exist and are not empty. 
+
+In particular, it checks for SqlObjects that use the `@UseClasspathSqlLocator`
+feature. It checks for SQL files for methods annotated with `@SqlQuery` or `@SqlUpdate`.
+
+**Why is this important?**
+
+Using the annotation processor will protect you from bugs caused by a 
+missing or empty `.sql` file - **at compile time**. 
+
+JDBI does throw Exceptions for these problems at runtime but it could be too late at that point, you know.
+
+**Usage**
+
+Just add the following dependency to your project, note the scope is `provided`
+
+```xml
+<dependency>
+    <groupId>com.github.zikani03</groupId>
+    <artifactId>jdbi-utils-useclasspathsql-checker</artifactId>
+    <version>${jdbi-utils.version}</version>
+    <scope>provided</scope>
+</dependency>
+```
+
 ### SQL Logging
 
 Add the `@LogSql` annotation to your SqlObjects to log executed SQL statements, by default the statements
