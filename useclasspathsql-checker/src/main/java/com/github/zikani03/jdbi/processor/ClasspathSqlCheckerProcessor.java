@@ -56,13 +56,14 @@ public class ClasspathSqlCheckerProcessor extends AbstractProcessor {
 
     @Override
     public boolean process(Set<? extends TypeElement> annotations, RoundEnvironment env) {
+        ElementKind annotatedElementKind = null;
         for(Element annotatedElement : env.getElementsAnnotatedWith(UseClasspathSqlLocator.class)) {
+            annotatedElementKind = annotatedElement.getKind();
             messager.printMessage(Diagnostic.Kind.NOTE, "Processing class: " + annotatedElement.getSimpleName());
-            if (!annotatedElement.getKind().equals(ElementKind.INTERFACE) || !annotatedElement.getKind().equals(ElementKind.CLASS)) {
+            if (!annotatedElementKind.isClass() && !annotatedElementKind.isInterface()) {
                 messager.printMessage(Diagnostic.Kind.ERROR,
-                        String.format("Class annotated with UseClassPathSqlLocator is not an interface: %s Kind: %s",
-                            annotatedElement.getSimpleName(),
-                            annotatedElement.getKind()),
+                        String.format("@UseClassPathSqlLocator annotated element is not an interface/class: %s ",
+                            annotatedElement.getSimpleName()),
                         annotatedElement);
                 env.errorRaised();
                 return true;
@@ -70,9 +71,8 @@ public class ClasspathSqlCheckerProcessor extends AbstractProcessor {
             TypeElement classElement = (TypeElement) annotatedElement;
 
             for(Element member: elementUtils.getAllMembers(classElement)) {
-                if (member.getAnnotation(SqlQuery.class) == null ||
+                if (member.getAnnotation(SqlQuery.class) == null &&
                     member.getAnnotation(SqlUpdate.class) == null) {
-                    // member.getKind() != ElementKind.METHOD ||
                     continue;
                 }
 
@@ -94,7 +94,7 @@ public class ClasspathSqlCheckerProcessor extends AbstractProcessor {
                     }
                 } catch(IOException ioe) {
                     messager.printMessage(Diagnostic.Kind.ERROR,
-                        String.format("ClasspathSqlChecker failed to load %s", sqlFilename),
+                        String.format("ClasspathSqlChecker could not find or load SQL file: %s", sqlFilename),
                         annotatedElement
                     );
                     env.errorRaised();
